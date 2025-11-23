@@ -1,25 +1,23 @@
-{ config, pkgs, ... }:
-let
-  dotfiles = "${config.home.homeDirectory}/john-dotfiles/dotfiles";
-  create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
-
-  configs = {
-    nvim = "nvim";
-    wofi = "wofi";
-    rofi = "rofi";
-    foot = "foot";
-    waybar = "waybar";
-  };
-in
+{ config, pkgs, inputs, ... }:
 {
   imports = [
     ./home/hyprland.nix
-    ./modules/theme.nix
+    ./home/hyprpanel.nix
+        inputs.zen-browser.homeModules.beta
   ];
+    programs.zen-browser.enable = true;
+  home.pointerCursor = {
+    gtk.enable = true;
+    x11.enable = true;
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Classic";
+    size = 24;
+  };
 
   home.username = "winter";
   home.homeDirectory = "/home/winter";
   home.stateVersion = "25.05";
+  programs.kitty.enable = true;
   programs.bash = {
     enable = true;
     shellAliases = {
@@ -39,6 +37,7 @@ in
 
   home.packages = with pkgs; [
     neovim
+    playerctl
     blueman
     ripgrep
     gh
@@ -62,11 +61,6 @@ in
     })
   ];
 
-  xdg.configFile = builtins.mapAttrs
-    (name: subpath: {
-      source = create_symlink "${dotfiles}/${subpath}";
-      recursive = true;
-    })
-    configs;
+
 
 }

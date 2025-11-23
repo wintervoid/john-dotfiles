@@ -6,11 +6,13 @@
       ./hardware-configuration.nix
     ];
   services = {
+  upower.enable = true;
     displayManager.ly.enable = true;
   };
+  stylix.enable = true;
+  stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
   networking.hostName = "john-nixos";
   networking.networkmanager.enable = true;
 
@@ -49,12 +51,10 @@
     ];
   };
 
-
   environment.systemPackages = with pkgs; [
     vim
     wget
     bluez
-    librewolf
     foot
     kitty
     waybar

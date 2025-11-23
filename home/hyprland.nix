@@ -1,18 +1,19 @@
 { pkgs, ... }:
 {
   services.hyprpaper.settings = {
-
     ipc = "on";
     splash = false;
     splash_offset = 2.0;
 
-    preload =
-      [ "~/john-dotfiles/assets/nixos-wallpaper-catppuccin-mocha.png" ];
-
-    wallpaper = [
+    preload = [
       "~/john-dotfiles/assets/nixos-wallpaper-catppuccin-mocha.png"
     ];
+
+    wallpaper = [
+      "eDP-1,~/john-dotfiles/assets/nixos-wallpaper-catppuccin-mocha.png"
+    ];
   };
+
   wayland.windowManager.hyprland = {
     enable = true;
 
@@ -24,7 +25,7 @@
       ];
 
       # Program variables
-      "$terminal" = "foot";
+      "$terminal" = "kitty";
       "$fileManager" = "dolphin";
       "$menu" = "wofi --show drun";
       "$reload_waybar" = "pkill waybar; waybar &";
@@ -33,7 +34,7 @@
 
       # Autostart
       exec-once = [
-        "waybar"
+        "hyprpanel"
         "hyprpaper"
       ];
 
@@ -52,8 +53,6 @@
         gaps_in = 2;
         gaps_out = 2;
         border_size = 1;
-        "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
-        "col.inactive_border" = "rgba(595959aa)";
         resize_on_border = false;
         allow_tearing = false;
         layout = "dwindle";
@@ -160,6 +159,7 @@
         "$mainMod, 0, workspace, 10"
         "$mainMod ALT, k, workspace, e+1"
         "$mainMod ALT, j, workspace, e-1"
+
         # Move active window to workspace
         "$mainMod SHIFT, 1, movetoworkspace, 1"
         "$mainMod SHIFT, 2, movetoworkspace, 2"
@@ -172,6 +172,17 @@
         "$mainMod SHIFT, 9, movetoworkspace, 9"
         "$mainMod SHIFT, 0, movetoworkspace, 10"
 
+        # Media controls
+        ", XF86AudioNext, exec, playerctl next"
+        ", XF86AudioPlay, exec, playerctl play-pause"
+        ", XF86AudioPrev, exec, playerctl previous"
+        ", XF86AudioStop, exec, playerctl stop"
+        
+        # Volume controls
+        ", XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
+        ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+        ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+        ", XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
       ];
 
       # Mouse bindings
